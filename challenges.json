@@ -1,0 +1,122 @@
+[{
+    "question":"Retrieve all clients who have a 'Joint' type in the Source table.",
+    "query":"SELECT * FROM Source WHERE Type = 'Joint';"
+},
+{
+    "question":"Find the total number of transactions in the Transactions table.",
+    "query":"SELECT COUNT(*) FROM Transactions;"
+},
+{
+    "question":"List all transactions made by a client with Client_ID '20001103'.",
+    "query":"SELECT * FROM Transactions WHERE Client_ID = '20001103';"
+},
+{
+    "question":"Get the names of all countries in the Beneficiary table.",
+    "query":"SELECT DISTINCT Country_Name FROM Beneficiary;"
+},
+{
+    "question":"Find the total amount of transactions made in 'EUR' currency.",
+    "query":"SELECT SUM(Amount) FROM Transactions WHERE Currency = 'EUR';"
+},
+{
+    "question":"Retrieve all transactions that occurred on '2023-01-03'.",
+    "query":"SELECT * FROM Transactions WHERE DATE(Time,'unixepoch','localtime') = '2023-01-01';"
+},
+{
+    "question":"Find the Client_ID and Transaction_ID of transactions with an amount greater than 100.",
+    "query":"SELECT Client_ID, Transaction_ID FROM Transactions WHERE Amount > 100;"
+},
+{
+    "question":"List all clients who made transactions in 'USD'.",
+    "query":"SELECT DISTINCT S.Client_ID FROM Source S INNER JOIN Transactions T ON S.Client_ID = T.Client_ID WHERE T.Currency = 'USD';"
+},
+{
+    "question":"Get the BIC Code and IBAN of the beneficiary with Beneficiary_ID '0129776190'.",
+    "query":"SELECT BIC_Code, IBAN FROM Beneficiary WHERE Beneficiary_ID = '0129776190';"
+},
+{
+    "question":"Retrieve all transactions made to the beneficiary with BIC_Code 'BCEELULL'.",
+    "query":"SELECT * FROM Transactions WHERE Beneficiary_ID IN (SELECT Beneficiary_ID FROM Beneficiary WHERE BIC_Code = 'BCEELULL');"
+},
+{
+    "question":"Find the total number of unique branches in the Source table.",
+    "query":"SELECT COUNT(DISTINCT Branch_ID) FROM Source;"
+},
+{
+    "question":"List all transactions made by clients from branch 'LU01'.",
+    "query":"SELECT * FROM Transactions WHERE Client_ID IN (SELECT Client_ID FROM Source WHERE Branch_ID = 'LU01');"
+},
+{
+    "question":"Retrieve the Contract_ID for the client with Client_ID '20001920'.",
+    "query":"SELECT Contract_ID FROM Source WHERE Client_ID = '20001920';"
+},
+{
+    "question":"Get the total transaction amount for each currency.",
+    "query":"SELECT Currency, SUM(Amount) AS TotalAmount FROM Transactions GROUP BY Currency;"
+},
+{
+    "question":"Find the number of beneficiaries in each country from the Beneficiary table.",
+    "query":"SELECT Country_Name, COUNT(*) AS Number_of_Beneficiaries FROM Beneficiary GROUP BY Country_Name ORDER BY Country_Name;"
+},
+{
+    "question":"List all transactions made on the same day as '2023-01-03' and have an amount greater than 50.",
+    "query":"SELECT * FROM Transactions WHERE DATE(Time,'unixepoch','localtime') = '2023-01-03' AND Amount > 50;"
+},
+{
+    "question":"Get the Transaction_ID of the largest transaction amount.",
+    "query":"SELECT Transaction_ID FROM Transactions WHERE Amount = (SELECT MAX(Amount) FROM Transactions);"
+},
+{
+    "question":"Find the BIC Code and IBAN of clients who made transactions in 'USD'.",
+    "query":"SELECT DISTINCT S.BIC_Code, S.IBAN FROM Source S INNER JOIN Transactions T ON S.Client_ID = T.Client_ID WHERE T.Currency = 'USD';"
+},
+{
+    "question":"List all transactions made to the beneficiary in 'Luxembourg' with a transaction type of 'SEPA Instant'.",
+    "query":"SELECT * FROM Transactions WHERE Beneficiary_ID IN (SELECT Beneficiary_ID FROM Beneficiary WHERE Country_Name = 'Luxembourg') AND Transaction_Type = 'SEPA Instant';"
+},
+{
+    "question":"Retrieve all clients who have made transactions in both 'EUR' and 'USD'.",
+    "query":"SELECT DISTINCT Client_ID FROM Transactions WHERE Currency IN ('EUR', 'USD') GROUP BY Client_ID HAVING COUNT(DISTINCT Currency) = 2;"
+},
+{
+    "question":"Get the Transaction_ID and Amount of the top 3 largest Euro transactions.",
+    "query":"SELECT Transaction_ID, Amount FROM Transactions WHERE Currency='EUR' ORDER BY Amount DESC LIMIT 3;"
+},
+{
+    "question":"Find the Contract_ID for the client with the highest total transaction amount in Euro.",
+    "query":"SELECT S.Contract_ID FROM Source S INNER JOIN (SELECT Client_ID, SUM(Amount) AS TotalAmount FROM Transactions WHERE Currency='EUR' GROUP BY Client_ID ORDER BY TotalAmount DESC LIMIT 1) T ON S.Client_ID = T.Client_ID;"
+},
+
+{
+    "question":"List all transactions made to beneficiaries in 'Luxembourg' or 'Germany'.",
+    "query":"SELECT * FROM Transactions WHERE Beneficiary_ID IN (SELECT Beneficiary_ID FROM Beneficiary WHERE Country_Name IN ('Luxembourg', 'Germany'));"
+},
+{
+    "question":"Retrieve the Transaction_ID and Transaction_Type of transactions made by clients with 'Joint' type.",
+    "query":"SELECT T.Transaction_ID, T.Transaction_Type FROM Transactions T INNER JOIN Source S ON T.Client_ID = S.Client_ID WHERE S.Type = 'Joint';"
+},
+{
+    "question":"Get the Client_ID and Type of clients who have made transactions in both 'EUR' and 'USD'.",
+    "query":"SELECT S.Client_ID, S.Type FROM Source S WHERE EXISTS (SELECT 1 FROM Transactions T1 WHERE S.Client_ID = T1.Client_ID AND T1.Currency = 'EUR') AND EXISTS (SELECT 1 FROM Transactions T2 WHERE S.Client_ID = T2.Client_ID AND T2.Currency = 'USD');"
+},
+{
+    "question":"Find the average transaction amount for each currency.",
+    "query":"SELECT Currency, AVG(Amount) AS AvgAmount FROM Transactions GROUP BY Currency;"
+},
+{
+    "question":"List all transactions made to beneficiaries in 'Luxembourg' with a BIC that starts with 'BCEE'.",
+    "query":"SELECT T.* FROM Transactions T JOIN Beneficiary B ON T.Beneficiary_ID = B.Beneficiary_ID WHERE B.Country_Name = 'Luxembourg' AND B.BIC_Code LIKE 'BCEE%';"
+},
+{
+    "question":"Retrieve the Client_ID and Type of clients who have made transactions in 'EUR' and 'USD' but not in 'GBP'.",
+    "query":"SELECT S.Client_ID, S.Type FROM Source S WHERE S.Client_ID NOT IN (SELECT T1.Client_ID FROM Transactions T1 WHERE T1.Currency = 'GBP') AND S.Client_ID IN (SELECT T2.Client_ID FROM Transactions T2 WHERE T2.Currency = 'EUR') AND S.Client_ID IN (SELECT T3.Client_ID FROM Transactions T3 WHERE T3.Currency = 'USD');"
+},
+{
+    "question":"Get the total transaction amount for each client.",
+    "query":"SELECT Client_ID, SUM(Amount) AS TotalAmount FROM Transactions GROUP BY Client_ID;"
+},
+{
+    "question":"List the top 3 beneficiaries (IBANs) who have received the highest total amount across all transactions.",
+    "query":"SELECT B.IBAN, SUM(T.Amount) AS TotalAmountReceived FROM Beneficiary B JOIN Transactions T ON B.Beneficiary_ID = T.Beneficiary_ID GROUP BY B.IBAN ORDER BY TotalAmountReceived DESC LIMIT 3;"
+}
+]
