@@ -20,7 +20,7 @@ To get started with FinChallenge:
    ```bash
    git clone https://github.com/Etamin/FinChallenge.git
    ```
-
+
 2. **Set Up the Environment**:
    - Ensure you have SQLite installed to interact with the `bank.sqlite` database.
    - Use a JSON parser to read and modify the `challenges.json` file.
